@@ -1,4 +1,4 @@
 public static void main()
 {
- //enter code here 
+ System.out.println("ola nino");
 }

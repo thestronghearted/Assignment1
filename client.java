@@ -10,13 +10,20 @@ public class client{
 		Console input = System.console();
 		System.out.println("Welcome to the chat service Facebook wishes they made");
 		connectionType = input.readLine("Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
-		if (connectionType.equals("Yes") || connectionType.equals("Y")) {
-			ip = "localhost";
-			port = 32517;
-		}
-		else if (connectionType.equals("No") || connectionType.equals("N")) {
-			ip = "105.185.168.28";
-		}
+		while (true){
+			if (connectionType.equals("Yes") || connectionType.equals("Y")) {
+				ip = "localhost";
+				port = 32517;
+				break;
+			}
+			else if (connectionType.equals("No") || connectionType.equals("N")) {
+				ip = "105.185.168.28";
+				break;
+			}
+			else{
+				connectionType = input.readLine("Please choose a correct option (Y or N): ");
+			}
+		}	
 		try(Socket tcpsocket = new Socket(InetAddress.getByName(ip),port))
 		{
 			InputStream tcpinput = tcpsocket.getInputStream();

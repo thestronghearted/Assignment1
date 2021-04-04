@@ -4,32 +4,31 @@ import java.util.*;
 
 public class client{
 	public static void main(String[] args){
-		int port = 32517;
-		byte[] message;
-		String echo;
-		byte[] ipAddr = new byte[]{127,0,1,1};
-		try(Socket tcpsocket = new Socket(InetAddress.getByAddress(ipAddr),port))
+		int port = 57234;
+		String ip = " ";
+		String connectionType;
+		Console input = System.console();
+		System.out.println("Welcome to the chat service Facebook wishes they made");
+		connectionType = input.readLine("Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
+		if (connectionType.equals("Yes") || connectionType.equals("Y")) {
+			ip = "localhost";
+			port = 32517;
+		}
+		else if (connectionType.equals("No") || connectionType.equals("N")) {
+			ip = "105.185.168.28";
+		}
+		try(Socket tcpsocket = new Socket(InetAddress.getByName(ip),port))
 		{
 			InputStream tcpinput = tcpsocket.getInputStream();
 			BufferedReader tcpreader = new BufferedReader(new InputStreamReader(tcpinput));
 			System.out.println(tcpreader.readLine());
 			InetAddress serveraddress = tcpsocket.getInetAddress();
-			DatagramSocket udpsocket = new DatagramSocket();
-			Console input = System.console();
-			String text;
 			tcpsocket.close();
-			do{
-				text = input.readLine("Enter text: ");
-				message = text.getBytes();
-				DatagramPacket packet = new DatagramPacket(message, message.length, serveraddress,port);
-				udpsocket.send(packet);
-				packet = new DatagramPacket(message,message.length);
-				udpsocket.receive(packet);
-				echo = new String(packet.getData(), 0, packet.getLength());
-				System.out.println(echo);
-			}
-			while (!echo.equals("bye"));
-			udpsocket.close();
+			DatagramSocket udpsocket = new DatagramSocket();
+			clientSenderThread sender = new clientSenderThread(serveraddress,udpsocket,port);
+			sender.start();
+			clientReceiverThread receiver = new clientReceiverThread(udpsocket);
+			receiver.start();
 		}
 		catch (UnknownHostException e){
 			e.printStackTrace();
@@ -37,6 +36,5 @@ public class client{
 		catch (IOException e){
 			e.printStackTrace();
 		}
-	} 
+	}
 }
-//test 123

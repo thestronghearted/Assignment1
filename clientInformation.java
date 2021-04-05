@@ -1,22 +1,14 @@
-public class clientInformation
-{
-    String Name;
-    DatagramSocket Identifier;
+import java.net.*;
 
-    public clientInformation(String Name, DatagramSocket Identifier)
-    {
-        this.Name = Name;
-        this.Identifier = Identifier;
-    }
-
-    public String getName()
-    {
-        return Name;
-    }
-
-    public DatagramSocket getIdentifier()
-    {
-        return Identifier;
-    }
-
+public class clientInformation {
+	InetAddress clientAddress;
+	DatagramSocket clientsocket;
+	int clientport;
+	String studentNumber;
+	public clientInformation(String number, InetAddress clientAddress, int clientport, DatagramSocket clientsocket) {
+		this.studentNumber=number;
+		this.clientAddress = clientAddress;
+		this.clientport = clientport;
+		this.clientsocket = clientsocket;
+	}
 }

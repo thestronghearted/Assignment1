@@ -2,8 +2,11 @@ import java.io.*;
 import java.net.*;
 public class clientReceiverThread extends Thread{
 	DatagramSocket udpClientSocket;
-	public clientReceiverThread(DatagramSocket user) {
+	client_GUI gui;
+	public clientReceiverThread(DatagramSocket user, client_GUI gui) {
 		this.udpClientSocket=user;
+		this.gui = gui;
+		
 	}
 	public void run() {
 		byte[] receiveData = new byte[1024];
@@ -12,7 +15,7 @@ public class clientReceiverThread extends Thread{
 			try {
 				udpClientSocket.receive(receivePacket);
 				String serverecho = new String(receivePacket.getData(), 0, receivePacket.getLength());
-				System.out.println(serverecho);
+				gui.txtOutput.append(serverecho + "\n");
 				if (serverecho.equals("bye")) {
 					udpClientSocket.close();
 					break;

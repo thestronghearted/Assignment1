@@ -24,7 +24,6 @@ public class client{
 			InputStream tcpinput = tcpsocket.getInputStream();
 			BufferedReader tcpreader = new BufferedReader(new InputStreamReader(tcpinput));
 			port = Integer.parseInt(tcpreader.readLine());
-			System.out.println(port);
 			if (test) {
 				port = port +(57234-32517);
 			}

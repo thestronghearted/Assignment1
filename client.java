@@ -1,86 +1,46 @@
 import java.net.*;
-import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 
 public class client{
 	public static void main(String[] args){
-		
-		
 		int port = 57234;
 		String ip = " ";
+		String connectionType;
+		Console input = System.console();
 		System.out.println("Welcome to the chat service Facebook wishes they made");
-		
-		if(sameLan() == true ){
+		connectionType = input.readLine("Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
+		boolean test = false;
+		if (connectionType.equals("Yes") || connectionType.equals("Y")) {
 			ip = "localhost";
 			port = 32517;
 		}
-		else
-		{
+		else if (connectionType.equals("No") || connectionType.equals("N")) {
 			ip = "105.185.168.28";
+			test = true;
 		}
-		
 		try(Socket tcpsocket = new Socket(InetAddress.getByName(ip),port))
 		{
 			InputStream tcpinput = tcpsocket.getInputStream();
 			BufferedReader tcpreader = new BufferedReader(new InputStreamReader(tcpinput));
-			System.out.println(tcpreader.readLine());
+			port = Integer.parseInt(tcpreader.readLine());
+			System.out.println(port);
+			if (test) {
+				port = port +(57234-32517);
+			}
 			InetAddress serveraddress = tcpsocket.getInetAddress();
 			tcpsocket.close();
-			DatagramSocket udpsocket = new DatagramSocket();
-			//clientSenderThread sender = new clientSenderThread(serveraddress,udpsocket,port); SENDERTHREAD REPLACED BY ACTION LISTENER BELOW
-			
-			client_GUI gui = new client_GUI();
-			
-			//SEND BTN PRESSED
-			gui.getRootPane().setDefaultButton(gui.sendBtn); //PRESSING ENTER == PRESSING SEND BUTTON
-			gui.sendBtn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					String message = gui.txtInput.getText();
-					byte[] messageData = new byte[1024];
-					messageData = message.getBytes();
-					DatagramPacket sendPacket = new DatagramPacket(messageData,messageData.length,serveraddress,32517);
-					gui.txtInput.setText("");
-					try {
-						udpsocket.send(sendPacket);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if (message.equals("bye")) {
-						//close gui
-					}
-				}
-			});
-			clientReceiverThread receiver = new clientReceiverThread(udpsocket,gui);
+			DatagramSocket udp = new DatagramSocket();
+			clientSenderThread sender = new clientSenderThread(serveraddress, udp, port);
+			sender.start();
+			clientReceiverThread receiver = new clientReceiverThread(sender.getudp());
 			receiver.start();
+		}
+		catch (UnknownHostException e){
+			e.printStackTrace();
 		}
 		catch (IOException e){
 			e.printStackTrace();
 		}
 	}
-	
-	static boolean sameLan() 
-	{
-		String connectionType = JOptionPane.showInputDialog("Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
-		while (true){
-			if (connectionType.equalsIgnoreCase("yes") || connectionType.equalsIgnoreCase("Y")) 
-			{
-				return true;
-			}
-			else if (connectionType.equalsIgnoreCase("no") || connectionType.equalsIgnoreCase("N")) 
-			{
-				return false;
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(null,"Please choose a correct option (Y or N): ");
-				connectionType = JOptionPane.showInputDialog("Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
-			}
-		}	
-	}
-	
 }

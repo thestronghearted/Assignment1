@@ -3,8 +3,6 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class client_GUI extends JFrame {
 

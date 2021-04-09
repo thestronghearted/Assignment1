@@ -1,5 +1,3 @@
-import java.io.*;
-import java.util.*;
 import java.net.*;
 import java.net.UnknownHostException;
 public class getIp{

@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
 public class serverThread extends Thread {
 	clientInformation[] users;
 	String sendernumber;

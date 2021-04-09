@@ -1,4 +1,7 @@
 import java.net.*;
+
+import javax.swing.JOptionPane;
+
 import java.io.*;
 
 public class client{
@@ -6,15 +9,14 @@ public class client{
 		int port = 57234;
 		String ip = " ";
 		String connectionType;
-		Console input = System.console();
 		System.out.println("Welcome to the chat service Facebook wishes they made");
-		connectionType = input.readLine("Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
+		connectionType = JOptionPane.showInputDialog(null,"Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
 		boolean test = false;
-		if (connectionType.equals("Yes") || connectionType.equals("Y")) {
+		if (connectionType.equalsIgnoreCase("Yes") || connectionType.equalsIgnoreCase("Y")) {
 			ip = "localhost";
 			port = 32517;
 		}
-		else if (connectionType.equals("No") || connectionType.equals("N")) {
+		else if (connectionType.equalsIgnoreCase("No") || connectionType.equalsIgnoreCase("N")) {
 			ip = "105.185.168.28";
 			test = true;
 		}

@@ -1,5 +1,5 @@
 import java.net.*;
-
+import java.awt.event.*;
 import javax.swing.JOptionPane;
 
 import java.io.*;
@@ -22,6 +22,7 @@ public class client{
 		}
 		try(Socket tcpsocket = new Socket(InetAddress.getByName(ip),port))
 		{
+			//TCP
 			InputStream tcpinput = tcpsocket.getInputStream();
 			BufferedReader tcpreader = new BufferedReader(new InputStreamReader(tcpinput));
 			port = Integer.parseInt(tcpreader.readLine());
@@ -31,16 +32,54 @@ public class client{
 			}
 			InetAddress serveraddress = tcpsocket.getInetAddress();
 			tcpsocket.close();
+			
+			//UDP
 			DatagramSocket udp = new DatagramSocket();
-			clientSenderThread sender = new clientSenderThread(serveraddress, udp, port);
-			sender.start();
-			clientReceiverThread receiver = new clientReceiverThread(sender.getudp());
+			String senderNum = JOptionPane.showInputDialog("Enter your student number");
+			String recieverNum = JOptionPane.showInputDialog("Enter the receivers student number");
+			String message = senderNum + " " + recieverNum;
+			byte[] messageData = new byte[1024];
+			messageData = message.getBytes();
+			DatagramPacket sendPacket = new DatagramPacket(messageData, messageData.length, serveraddress, port);
+			udp.send(sendPacket);
+			JOptionPane.showMessageDialog(null,"Please wait 15 seconds...");
+			Thread.sleep(15000);
+			JOptionPane.showMessageDialog(null,"You may now type your message");
+			client_GUI gui = new client_GUI();
+			//initialize user
+
+
+			gui.sendBtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String message = gui.txtInput.getText();
+					byte[] messageData = new byte[1024];
+					messageData = message.getBytes();
+					DatagramPacket sendPacket = new DatagramPacket(messageData,messageData.length,serveraddress,32517);
+					gui.txtInput.setText("");
+					try {
+						udp.send(sendPacket);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (message.equals("bye")) {
+						gui.dispatchEvent(new WindowEvent(gui, WindowEvent.WINDOW_CLOSING));
+						//close gui
+					}
+				}
+			});
+			//clientSenderThread sender = new clientSenderThread(serveraddress, udp, port,gui);
+			//sender.start();
+			clientReceiverThread receiver = new clientReceiverThread(udp);
 			receiver.start();
 		}
 		catch (UnknownHostException e){
 			e.printStackTrace();
 		}
 		catch (IOException e){
+			e.printStackTrace();
+		}
+		catch (InterruptedException e){
 			e.printStackTrace();
 		}
 	}

@@ -34,6 +34,7 @@ public class client{
 			tcpsocket.close();
 			
 			//UDP
+			//initialize user
 			DatagramSocket udp = new DatagramSocket();
 			String senderNum = JOptionPane.showInputDialog("Enter your student number");
 			String recieverNum = JOptionPane.showInputDialog("Enter the receivers student number");
@@ -42,19 +43,24 @@ public class client{
 			messageData = message.getBytes();
 			DatagramPacket sendPacket = new DatagramPacket(messageData, messageData.length, serveraddress, port);
 			udp.send(sendPacket);
-			JOptionPane.showMessageDialog(null,"Please wait 15 seconds...");
-			Thread.sleep(15000);
-			JOptionPane.showMessageDialog(null,"You may now type your message");
+			//JOptionPane.showMessageDialog(null,"Please wait 15 seconds...");
+			//Thread.sleep(15000);
+			//JOptionPane.showMessageDialog(null,"You may now type your message");
+			
 			client_GUI gui = new client_GUI();
-			//initialize user
-
-
+			gui.getRootPane().setDefaultButton(gui.sendBtn);
+			
+			//clientSenderThread sender = new clientSenderThread(serveraddress, udp, port,gui);
+			//sender.start();
+			clientReceiverThread receiver = new clientReceiverThread(udp,gui,recieverNum);
+			receiver.start();
 			gui.sendBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					String message = gui.txtInput.getText();
 					byte[] messageData = new byte[1024];
 					messageData = message.getBytes();
 					DatagramPacket sendPacket = new DatagramPacket(messageData,messageData.length,serveraddress,32517);
+					gui.txtOutput.append(senderNum+": "+message+"\n");
 					gui.txtInput.setText("");
 					try {
 						udp.send(sendPacket);
@@ -63,15 +69,11 @@ public class client{
 						e.printStackTrace();
 					}
 					if (message.equals("bye")) {
-						gui.dispatchEvent(new WindowEvent(gui, WindowEvent.WINDOW_CLOSING));
-						//close gui
+						gui.dispatchEvent(new WindowEvent(gui, WindowEvent.WINDOW_CLOSING));//close gui/frame
+						
 					}
 				}
 			});
-			//clientSenderThread sender = new clientSenderThread(serveraddress, udp, port,gui);
-			//sender.start();
-			clientReceiverThread receiver = new clientReceiverThread(udp);
-			receiver.start();
 		}
 		catch (UnknownHostException e){
 			e.printStackTrace();
@@ -79,8 +81,8 @@ public class client{
 		catch (IOException e){
 			e.printStackTrace();
 		}
-		catch (InterruptedException e){
-			e.printStackTrace();
-		}
+		//catch (InterruptedException e){
+	//		e.printStackTrace();
+	//	}
 	}
 }

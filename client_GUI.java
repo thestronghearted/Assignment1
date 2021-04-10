@@ -24,10 +24,15 @@ public class client_GUI extends JFrame {
 			southP.setLayout(new BorderLayout());
 			
 			//OUTPUT TEXT AREA
-			txtOutput= new JTextArea();
+			  
+			txtOutput= new JTextArea(20,60);
 			txtOutput.setEditable(false); 
-			txtOutput.setPreferredSize(new Dimension(750,200));
-			northP.add(txtOutput);
+			//txtOutput.setPreferredSize(new Dimension(750,200));
+			JScrollPane scroll = new JScrollPane(txtOutput);
+			scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+			northP.add(scroll);
+			//northP.add(txtOutput);
 			
 			//INPUT TEXT AREA
 			txtInput = new JTextField();

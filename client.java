@@ -43,9 +43,9 @@ public class client{
 			messageData = message.getBytes();
 			DatagramPacket sendPacket = new DatagramPacket(messageData, messageData.length, serveraddress, port);
 			udp.send(sendPacket);
-			//JOptionPane.showMessageDialog(null,"Please wait 15 seconds...");
-			//Thread.sleep(15000);
-			//JOptionPane.showMessageDialog(null,"You may now type your message");
+			JOptionPane.showMessageDialog(null,"Please wait 15 seconds...");
+			Thread.sleep(15000);
+			JOptionPane.showMessageDialog(null,"You may now type your message");
 			
 			client_GUI gui = new client_GUI();
 			gui.getRootPane().setDefaultButton(gui.sendBtn);
@@ -81,8 +81,8 @@ public class client{
 		catch (IOException e){
 			e.printStackTrace();
 		}
-		//catch (InterruptedException e){
-	//		e.printStackTrace();
-	//	}
+		catch (InterruptedException e){
+			e.printStackTrace();
+		}
 	}
 }

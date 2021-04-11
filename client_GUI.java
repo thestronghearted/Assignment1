@@ -26,17 +26,13 @@ public class client_GUI extends JFrame {
 			//OUTPUT TEXT AREA
 			  
 			txtOutput= new JTextArea(20,60);
-			txtOutput.setEditable(false); 
-			//txtOutput.setPreferredSize(new Dimension(750,200));
+			txtOutput.setEditable(false);
 			JScrollPane scroll = new JScrollPane(txtOutput);
 			scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
 			northP.add(scroll);
-			//northP.add(txtOutput);
 			
 			//INPUT TEXT AREA
 			txtInput = new JTextField();
-			txtInput.setText("type here");
 			txtInput.setPreferredSize(new Dimension(600,100));
 			txtInput.setHorizontalAlignment(JLabel.LEFT);
 			southP.add(txtInput,BorderLayout.WEST);

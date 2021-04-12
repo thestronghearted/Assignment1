@@ -18,12 +18,26 @@ public class clientReceiverThread extends Thread{
 				udpClientSocket.receive(receivePacket);
 				String serverecho = new String(receivePacket.getData(), 0, receivePacket.getLength());
 				if (serverecho.equals("bye")) {
-					gui.dispatchEvent(new WindowEvent(gui, WindowEvent.WINDOW_CLOSING));//close gui/frame
+					gui.txtOutput.append(name+": "+serverecho+"\n");
+					gui.txtOutput.setCaretPosition(gui.txtOutput.getDocument().getLength());
+					serverecho = "User has disconnected. Please close the application to begin another chat";
+					gui.txtOutput.append("Server: "+serverecho+"\n");
+					gui.txtOutput.setCaretPosition(gui.txtOutput.getDocument().getLength());
+					serverecho = "bye";
+					byte[] endchat = serverecho.getBytes();
+					DatagramPacket disconnect = new DatagramPacket(endchat,endchat.length,receivePacket.getAddress(),receivePacket.getPort());
+					udpClientSocket.send(disconnect);
 					break;
 				}
-				gui.txtOutput.append(name+": "+serverecho+"\n");
-				gui.txtOutput.setCaretPosition(gui.txtOutput.getDocument().getLength());
-				
+				else if(serverecho.equals("1xt872nx")) {
+					gui.txtOutput.append("   (Message received)"+"\n");
+					gui.txtOutput.setCaretPosition(gui.txtOutput.getDocument().getLength());
+				}
+				else
+				{
+					gui.txtOutput.append(name+": "+serverecho+"\n");
+					gui.txtOutput.setCaretPosition(gui.txtOutput.getDocument().getLength());
+				}
 			}
 			catch (IOException e) {
 				e.printStackTrace();

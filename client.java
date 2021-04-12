@@ -9,7 +9,6 @@ public class client{
 		int port = 57234;
 		String ip = " ";
 		String connectionType;
-		System.out.println("Welcome to the chat service Facebook wishes they made");
 		connectionType = JOptionPane.showInputDialog(null,"Are you on the same LAN as server: ( Yes(Y) or No(N) ) \n");
 		boolean test = false;
 		if (connectionType.equalsIgnoreCase("Yes") || connectionType.equalsIgnoreCase("Y")) {
@@ -20,13 +19,15 @@ public class client{
 			ip = "105.185.168.28";
 			test = true;
 		}
+		JOptionPane.showMessageDialog(null,"Connecting...");
 		try(Socket tcpsocket = new Socket(InetAddress.getByName(ip),port))
 		{
+			JOptionPane.getRootFrame().dispose();
 			//TCP
 			InputStream tcpinput = tcpsocket.getInputStream();
 			BufferedReader tcpreader = new BufferedReader(new InputStreamReader(tcpinput));
 			port = Integer.parseInt(tcpreader.readLine());
-			System.out.println(port);
+			final int portfinal = port;
 			if (test) {
 				port = port +(57234-32517);
 			}
@@ -43,9 +44,6 @@ public class client{
 			messageData = message.getBytes();
 			DatagramPacket sendPacket = new DatagramPacket(messageData, messageData.length, serveraddress, port);
 			udp.send(sendPacket);
-			JOptionPane.showMessageDialog(null,"Please wait 15 seconds...");
-			Thread.sleep(15000);
-			JOptionPane.showMessageDialog(null,"You may now type your message");
 			
 			client_GUI gui = new client_GUI();
 			gui.getRootPane().setDefaultButton(gui.sendBtn);
@@ -59,13 +57,12 @@ public class client{
 					String message = gui.txtInput.getText();
 					byte[] messageData = new byte[1024];
 					messageData = message.getBytes();
-					DatagramPacket sendPacket = new DatagramPacket(messageData,messageData.length,serveraddress,32517);
-					gui.txtOutput.append(senderNum+": "+message+"\n");
+					DatagramPacket sendPacket = new DatagramPacket(messageData,messageData.length,serveraddress,portfinal);
+					gui.txtOutput.append(senderNum+": "+message);
 					gui.txtInput.setText("");
 					try {
 						udp.send(sendPacket);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					if (message.equals("bye")) {
@@ -79,9 +76,6 @@ public class client{
 			e.printStackTrace();
 		}
 		catch (IOException e){
-			e.printStackTrace();
-		}
-		catch (InterruptedException e){
 			e.printStackTrace();
 		}
 	}

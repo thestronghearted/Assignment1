@@ -7,16 +7,17 @@ public class serverThread extends Thread {
 	byte[] message;
 	String messagereceived;
 	int sender,receiver;
+	String packetlosstest;
 	public serverThread(clientInformation[] users, String sendernumber, String receivernumber) {
 		this.message = new byte[1024];
 		this.messagereceived = "";
 		this.users=users;
 		this.sendernumber=sendernumber;
 		this.receivernumber=receivernumber;
+		this.packetlosstest = "1xt872nx";
 	}
 	public void run() {
 		try {
-			Thread.sleep(15000);
 			int tempcounter=0;
 			do {
 				tempcounter=0;
@@ -41,21 +42,24 @@ public class serverThread extends Thread {
 				}
 				DatagramPacket packet = new DatagramPacket(message, message.length);
 				users[sender].clientsocket.receive(packet);
+				message = packetlosstest.getBytes();
+				DatagramPacket packetloss = new DatagramPacket(message,message.length,users[sender].clientAddress,users[sender].clientport);
+				users[sender].clientsocket.send(packetloss);
 				messagereceived = new String(packet.getData(),0,packet.getLength());
-				System.out.println(messagereceived);
 				message = messagereceived.getBytes();
 				packet = new DatagramPacket(message,message.length,users[receiver].clientAddress,users[receiver].clientport);
+				if (messagereceived.equals("bye")) {
+					users[sender].clientsocket.close();
+					users[sender].inChatWith="";
+					users[receiver].inChatWith="";
+					System.out.println("Happy");
+				}
 				users[receiver].clientsocket.send(packet);
 				message = new byte[1024];
 			}
 			while(!messagereceived.equals("bye"));
-			users[sender].clientsocket.close();
-			users[receiver].clientsocket.close();
 		}
-		catch (IOException e) {
-		    e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		catch (IOException e ) {
+		} 
 	}
 }

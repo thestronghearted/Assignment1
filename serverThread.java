@@ -7,14 +7,12 @@ public class serverThread extends Thread {
 	byte[] message;
 	String messagereceived;
 	int sender,receiver;
-	String packetlosstest;
 	public serverThread(clientInformation[] users, String sendernumber, String receivernumber) {
 		this.message = new byte[1024];
 		this.messagereceived = "";
 		this.users=users;
 		this.sendernumber=sendernumber;
 		this.receivernumber=receivernumber;
-		this.packetlosstest = "1xt872nx";
 	}
 	public void run() {
 		try {
@@ -59,9 +57,6 @@ public class serverThread extends Thread {
 				}
 				packet = new DatagramPacket(message, message.length);
 				users[sender].clientsocket.receive(packet);    // Wait at this line until the sender sends a message
-				message = packetlosstest.getBytes();
-				DatagramPacket packetloss = new DatagramPacket(message,message.length,users[sender].clientAddress,users[sender].clientport);
-				users[sender].clientsocket.send(packetloss);  // Confirm to the sender that their message was delivered
 				messagereceived = new String(packet.getData(),0,packet.getLength());
 				message = messagereceived.getBytes();
 				packet = new DatagramPacket(message,message.length,users[receiver].clientAddress,users[receiver].clientport);

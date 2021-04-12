@@ -8,7 +8,7 @@ public class client_GUI extends JFrame {
 
 		JTextField txtInput;
 		JTextArea txtOutput;
-		JButton sendBtn; //button.addActionListener(e -> System.out.println();)
+		JButton sendBtn; 
 		client_GUI(){
 			
 		

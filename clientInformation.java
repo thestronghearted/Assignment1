@@ -1,6 +1,6 @@
 import java.net.*;
 
-public class clientInformation {
+public class clientInformation { //Holds the socket information for every user who is connected as well as whether they are in a chat with someone
 	InetAddress clientAddress;
 	DatagramSocket clientsocket;
 	int clientport;

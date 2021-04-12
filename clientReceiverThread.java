@@ -42,6 +42,10 @@ public class clientReceiverThread extends Thread{
 				{
 					gui.txtOutput.append(name+": "+serverecho+"\n");   //Write the name of the person who sendt the message to you followed by their message
 					gui.txtOutput.setCaretPosition(gui.txtOutput.getDocument().getLength());
+					String confirm = "1xt872nx";
+					byte[] confirmation = confirm.getBytes();
+					DatagramPacket sendconfirmation = new DatagramPacket(confirmation,confirmation.length,receivePacket.getAddress(),receivePacket.getPort());
+					udpClientSocket.send(sendconfirmation);
 				}
 			}
 			catch (IOException e) {

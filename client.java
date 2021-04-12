@@ -1,10 +1,12 @@
 import java.net.*;
 import java.awt.event.*;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import java.io.*;
 
-public class client{
+public class client extends JFrame{
 	public static void main(String[] args){
 		int port = 57234; //Port number that the server is listening on is 32517 for local server and 57234 for server hosted on 105.185.168.28
 		String ip = " ";
@@ -19,9 +21,23 @@ public class client{
 			ip = "105.185.168.28"; //This server allows for people to connect to the application even if they aren't on the same network
 			test = true;
 		}
-		JOptionPane.showMessageDialog(null,"Click ok to begin connecting...");  // User has to click and wait until the server is able to take request
+		
+		JWindow window = new JWindow();//window that acts as a loading screen while the client connects to the server
+		try
+		{
+			window.getContentPane().add(new JLabel("", new ImageIcon(new URL("https://i.pinimg.com/originals/a2/dc/96/a2dc9668f2cf170fe3efeb263128b0e7.gif")), SwingConstants.CENTER));
+			window.setBounds(500, 150, 300, 200);
+		}
+		catch(MalformedURLException e)
+		{
+			e.printStackTrace();
+		}
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
 		try(Socket tcpsocket = new Socket(InetAddress.getByName(ip),port))  // TCP connection is used to give server user information and then UDP is used to send messages
 		{
+			
+			window.setVisible(false);
 			//TCP
 			InputStream tcpinput = tcpsocket.getInputStream();
 			BufferedReader tcpreader = new BufferedReader(new InputStreamReader(tcpinput));
@@ -46,7 +62,6 @@ public class client{
 			
 			client_GUI gui = new client_GUI(); //Initialise the GUI for this chat instance
 			gui.getRootPane().setDefaultButton(gui.sendBtn);
-			
 			clientReceiverThread receiver = new clientReceiverThread(udp,gui,recieverNum);
 			receiver.start();  //Starts a thread which listens for messages incoming to this client and displays them on the GUI
 			gui.sendBtn.addActionListener(new ActionListener() {  //Describes the actions which must take place when the user clicks the send button
@@ -55,7 +70,7 @@ public class client{
 					byte[] messageData = new byte[1024];
 					messageData = message.getBytes();
 					DatagramPacket sendPacket = new DatagramPacket(messageData,messageData.length,serveraddress,portfinal);
-					gui.txtOutput.append(senderNum+": "+message);
+					gui.txtOutput.append(senderNum+": "+message+ "\n");
 					gui.txtInput.setText("");
 					try {
 						udp.send(sendPacket);
@@ -75,5 +90,6 @@ public class client{
 		catch (IOException e){
 			e.printStackTrace();
 		}
+		
 	}
 }

@@ -26,7 +26,7 @@ public class serverThread extends Thread {
 				DatagramPacket packet = new DatagramPacket(message, message.length);
 				for (int i=0;i<users.length;i++) {
 					if (users[i]==null) {
-						if (!tryingToConnect) {
+						if (!tryingToConnect && !connected) {
 							messagereceived = "Waiting for other user to connect...";   // Lets the user know they must wait for the other person to connect
 							message = messagereceived.getBytes();
 							packet = new DatagramPacket(message,message.length,users[sender].clientAddress,users[sender].clientport);
@@ -49,7 +49,7 @@ public class serverThread extends Thread {
 							message = messagereceived.getBytes();
 							packet = new DatagramPacket(message,message.length,users[sender].clientAddress,users[sender].clientport);
 							users[sender].clientsocket.send(packet);
-							tryingToConnect=true;
+							connected=true;
 							break;
 						}
 					}

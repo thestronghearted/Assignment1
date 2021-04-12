@@ -12,5 +12,5 @@ CSC3002F Assignment 1
 	The chat box will open and messages can be exchanged once both users are connected
 	The session terminates once one of the users types exactly the message "bye" (User should not exit with red "x" unless prompted to)
 -Any user who tries to chat with a user already in a chat will be prompted to try again at another time (May require the person who was in a chat to relaunch the client class to become available to the new user)
-- The server confirms when messages are received by the other user through a prompt of (message received) at the end of the message you send
-- To get the GUI to work for windows hosts you have to download xming and run it without your firewall blocking it. Then configure putty with X11 forwarding option "localhost:0". Then run the application. Or on Linux hosts you have to ssh into nightmare with the -X option. Then run the application.
+- The user confirms when messages are received by the server which prompts the sender with (message received) at the end of the message they sent
+- To get the GUI to work on nightmare for windows hosts you have to download xming and run it without your firewall blocking it. Then configure putty with X11 forwarding option "localhost:0". Then run the application. Or on Linux hosts you have to ssh into nightmare with the -X option. Then run the application.

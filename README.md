@@ -10,6 +10,6 @@ CSC3002F Assignment 1
 	Click ok on connection screen and wait for further prompts
 	Enter your details and other users details(student numbers must be 9 characters)
 	The chat box will open and messages can be exchanged once both users are connected
-	The session terminates once one of the users types exactly the message "bye"
+	The session terminates once one of the users types exactly the message "bye" (User should not exit with red "x" unless prompted to)
 -Any user who tries to chat with a user already in a chat will be prompted to try again at another time (May require the person who was in a chat to relaunch the client class to become available to the new user)
 - The server confirms when messages are received by the other user through a prompt of (message received) at the end of the message you send
